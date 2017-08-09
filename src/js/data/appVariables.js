@@ -15,6 +15,8 @@ define(['ojs/ojcore', 'jquery'],
         self.deviceToken = ""; // for notificaton
         self.errMsg = "";
         
+        self.response;
+        
     }
     
     return new appVariablesModel();

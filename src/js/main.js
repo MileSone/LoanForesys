@@ -11,7 +11,6 @@
 requirejs.config(
         {
             baseUrl: 'js',
-
             // Path mappings for the logical module names
             // Update the main-release-paths.json for release mode when updating the mappings
             paths:
@@ -62,11 +61,14 @@ requirejs.config(
          * by the modules themselves), we are listing them explicitly to get the references to the 'oj' and 'ko'
          * objects in the callback
          */
-        require(['ojs/ojcore', 'knockout', 'appController', 'ojs/ojknockout',
+        require(['ojs/ojcore', 'knockout', 'appController','ojs/ojknockout',
             'ojs/ojmodule', 'ojs/ojrouter', 'ojs/ojnavigationlist'],
                 function (oj, ko, app) { // this callback gets executed when all required modules are loaded
 
                     $(function () {
+
+
+
                         function init() {
                             oj.Router.sync().then(
                                     function () {
@@ -80,6 +82,13 @@ requirejs.config(
                                         oj.Logger.error('Error in root start: ' + error.message);
                                     }
                             );
+
+                            self.logout = function () {
+                                if (confirm("logout ?"))
+                                {
+                                    oj.Router.rootInstance.go('login');
+                                }
+                            };
                         }
 
                         // If running in a hybrid (e.g. Cordova) environment, we need to wait for the deviceready 

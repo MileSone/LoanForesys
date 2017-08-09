@@ -361,3 +361,41 @@
 .demo-loan-input::placeholder{
     text-align: right;
 }
+
+.cam_btn{
+    max-width:60%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.oj-pic_dom{
+    max-width:100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.demo-fp-icon{
+    content:url("images/fp_btn.png");
+}
+
+#fp_btn{
+    height: 45px;
+    width: 100%;
+    margin: 0px 0px 0px 1px;
+}
+.demo-fp-icon_style:active{
+
+    background-color: #a81a05!important;
+    border-color: #a81a05!important;
+}
+
+.oj-fp-icon {
+    display: inline-block;
+    width: 55%;
+    height: 55%;
+    line-height: 1;
+    overflow: hidden;
+    direction: ltr;
+    text-align: center;
+    box-sizing: content-box;
+}

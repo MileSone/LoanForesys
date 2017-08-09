@@ -10,7 +10,9 @@
          ** more information on how to use this pattern.
         -->
         <header role="banner" class="oj-hybrid-applayout-header" data-bind="ojModule: headerConfig">
+
         </header>
+
     </div>
     <!-- This is where your main page content will be loaded -->
     <div class="oj-applayout-content">
@@ -90,18 +92,22 @@
                         image_upload:
                     </div>
                     <div class="oj-flex-bar-end">
-                         <button class="demo-loan-btn" data-bind="ojComponent: {
+                        <button class="demo-loan-btn" data-bind="ojComponent: {
                                     component:'ojButton',
                                     chroming: 'full',
-                                    label: oj.Translations.getTranslatedString('image_button1')}">
+                                    label: oj.Translations.getTranslatedString('image_button1')},click: photoButtonAction ">
                         </button>
                         <div style="width:10px;"></div>
-                         <button class="demo-loan-btn" data-bind="ojComponent: {
+                        <button class="demo-loan-btn" data-bind="ojComponent: {
                                     component:'ojButton',
                                     chroming: 'full',
                                     label: oj.Translations.getTranslatedString('image_button2')}">
                         </button>
                     </div>
+                </div>
+
+                <div class="oj-pic_dom">
+                    <img id="pic_dom" class="cam_btn" src="css/images/cam_icon.png"/>
                 </div>
 
                 <div data-bind="text: oj.Translations.getTranslatedString('request_label') + ': '" style="margin-bottom: 5px;">

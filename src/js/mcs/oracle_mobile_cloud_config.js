@@ -5,15 +5,15 @@ var mcs_config = {
         "ForEsys": {
             "authType": "basicAuth",
             "default": true,
-            "baseUrl": "https://mcs-gse00011678.mobileenv.us2.oraclecloud.com:443",
+            "baseUrl": "https://mobile-apacdemo08.mobileenv.us2.oraclecloud.com:443",
             "applicationKey": "",
             "analytics": {
                 "location": true
             },
             "authorization": {
                 "basicAuth": {
-                    "backendId": "4af80197-2907-45f5-9e0e-e6728b1723fb",
-                    "anonymousToken": "R1NFMDAwMTE2NzhfTUNTX01PQklMRV9BTk9OWU1PVVNfQVBQSUQ6Smk3cXBld3lrczlfbmI="
+                    "backendId": "8ee55afe-5c6b-4495-8139-adc142a3757b",
+                    "anonymousToken": "QVBBQ0RFTU8wOF9NT0JJTEVfTU9CSUxFX0FOT05ZTU9VU19BUFBJRDpLcDNxaWRydG81LmZ6bA=="
                 },
                 "oAuth": {
                     "clientId": "23b09985-be99-44b8-b791-5ecd8e9608c0",

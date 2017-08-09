@@ -12,17 +12,30 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController', 'mbe/mbe', 'data/ap
             function LoginViewModel() {
                 var self = this;
                 self.isLoggedIn = ko.observable(false);
-                self.username = ko.observable("mile2017");
-                self.password = ko.observable("A%xo&CYG%4j");
+                self.MBE_BaseURL = ko.observable("https://mobile-apacdemo08.mobileenv.us2.oraclecloud.com:443");
+                self.MBE_ID = ko.observable("8ee55afe-5c6b-4495-8139-adc142a3757b");
+                self.username = ko.observable("sharon.li@oracle.com");
+                self.password = ko.observable("P3rf3c4d@y!");
                 // Header Config
                 self.headerConfig = {'viewName': 'header', 'viewModelFactory': app.getHeaderModel()};
 
+                var storageUsername;
+                var storagePassword;
                 // Below are a subset of the ViewModel methods invoked by the ojModule binding
                 // Please reference the ojModule jsDoc for additionaly available methods.
-                self.loginSuccess = function (response, data) {
+
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
+                self.loginSuccess = function (response) {
                     app.isLoading(false);
+                    var storage = window.localStorage;
+                    storage.setItem("ForEUsername", window.btoa(self.username()));
+                    storage.setItem("ForEPassword", window.btoa(self.password()));
+
                     console.log(response);
-                    alert("Login Successfully!");
+                    appVar.response = response;
                     mbe.isLoggedIn = true;
                     self.isLoggedIn(mbe.isLoggedIn);
                     appVar.mcsLoginUser = self.username();
@@ -46,20 +59,142 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController', 'mbe/mbe', 'data/ap
                         appVar.mcsLoginUser = "employee";
                         appVar.mcsLoginPassword = "";
                         appVar.userRole = "employee";
-                        oj.Router.rootInstance.go('login').then(function () {
-                            window.location.reload(true);
-                        });
+                        oj.Router.rootInstance.go('login');
                     }
                 };
 
-                self.login = function (data, event) {
+                self.loginAction = function () {
+                    self.login(self.username(), self.password());
+                };
+
+
+
+                self.login = function (authUsername, authPassword, flager) {
                     app.isLoading(true);
-                    setTimeout(function () {
-                        mbe.authenticate(self.username(), self.password()).then(self.loginSuccess, self.loginFailure);
-                    }, 200);
-                    //    self.loginSuccess();
+                    $.ajax({
+                        type: "GET",
+                        url: self.MBE_BaseURL() + "/mobile/custom/ForEsysAPIs/loan",
+//                        data: null,
+                        async: false,
+                        headers: {
+                            "oracle-mobile-backend-id": self.MBE_ID(),
+                            "Authorization": "Basic " + window.btoa(authUsername + ":" + authPassword)
+                        },
+                        success: function (data) {
+                            if (flager) {
+                                console.log(data);
+                                appVar.response = data;
+                                app.isLoading(false);
+                                oj.Router.rootInstance.go('home');
+                            } else {
+                                self.loginSuccess(data);
+                            }
+                        },
+                        error: function (error) {
+                            self.loginFailure(error);
+                        },
+                        complete: function (data) {
+                            console.log("Login complete");
+                        }
+                    });
                     return true;
                 };
+
+                self.fp_login = function () {
+
+                    if (isAndroid) {
+                        self.androidFP();
+                    } else if (isiOS) {
+                        self.IOSFP();
+                    } else {
+                        alert("fp");
+                    }
+                };
+
+                self.IOSFP = function () {
+
+                    var storage = window.localStorage;
+                    if (storage.getItem("ForEUsername")) {
+                        storageUsername = window.atob(storage.getItem("ForEUsername"));
+                        storagePassword = window.atob(storage.getItem("ForEPassword"));
+                        window.plugins.touchid.isAvailable(
+                                function () {
+                                    window.plugins.touchid.verifyFingerprint(
+                                            'Scan your fingerprint please', // this will be shown in the native scanner popup
+                                            function (msg) {
+                                                alert('login with user: ' + storageUsername);
+
+                                                self.login(storageUsername, storagePassword, true);
+                                            }
+                                    , // success handler: fingerprint accepted
+                                            function (msg) {
+                                                alert('not ok: ' + JSON.stringify(msg));
+                                            } // error handler with errorcode and localised reason
+                                    );
+                                }, // success handler: TouchID available
+                                function (msg) {
+                                    alert('Your device dont have finger print, message: ' + msg);
+                                } // error handler: no TouchID available
+                        );
+                    } else {
+                        alert("You need login once in order to use finger print feature.");
+                    }
+                };
+
+
+
+
+                self.androidFP = function () {
+                    FingerprintAuth.isAvailable(isAvailableSuccess, isAvailableError);
+                };
+
+
+
+                function isAvailableSuccess(result) {
+                    console.log("FingerprintAuth available: " + JSON.stringify(result));
+                    if (result.isAvailable) {
+                        var storage = window.localStorage;
+
+                        if (storage.getItem("ForEUsername")) {
+                            storageUsername = window.atob(storage.getItem("ForEUsername"));
+                            storagePassword = window.atob(storage.getItem("ForEPassword"));
+
+                            var encryptConfig = {
+                                clientId: "ForEsys",
+                                username: storageUsername,
+                                password: storagePassword
+                            };
+                            FingerprintAuth.encrypt(encryptConfig, encryptSuccessCallback, encryptErrorCallback);
+                        } else {
+                            alert("You need login once in order to use finger print feature.");
+                        }
+                    }
+                }
+
+                function isAvailableError(message) {
+                    console.log("No Finger print error: " + message);
+                }
+
+                function encryptSuccessCallback(result) {
+                    console.log("successCallback(): " + JSON.stringify(result));
+                    if (result.withFingerprint) {
+                        console.log("Successfully encrypted credentials.");
+                        console.log("Encrypted credentials: " + result.token);
+                        var storage = window.localStorage;
+                        storage.setItem("FP_token", result.token);
+                        self.login(storageUsername, storagePassword, true);
+                    } else if (result.withBackup) {
+                        console.log("Authenticated with backup password");
+                    }
+                }
+
+                function encryptErrorCallback(error) {
+                    if (error === FingerprintAuth.ERRORS.FINGERPRINT_CANCELLED) {
+                        console.log("FingerprintAuth Dialog Cancelled!");
+                    } else {
+                        console.log("FingerprintAuth Error: " + error);
+                    }
+                }
                 /**
                  * Optional ViewModel method invoked when this ViewModel is about to be
                  * used for the View transition.  The application can put data fetch logic
@@ -73,8 +208,8 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController', 'mbe/mbe', 'data/ap
                  */
                 self.handleActivated = function (info) {
                     // Implement if needed
+                    self.isLoggedIn(false);
                 };
-
                 /**
                  * Optional ViewModel method invoked after the View is inserted into the
                  * document DOM.  The application can put logic that requires the DOM being
@@ -91,8 +226,6 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController', 'mbe/mbe', 'data/ap
                         self.logout();
                     }
                 };
-
-
                 /**
                  * Optional ViewModel method invoked after the bindings are applied on this View. 
                  * If the current View is retrieved from cache, the bindings will not be re-applied
@@ -104,7 +237,6 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController', 'mbe/mbe', 'data/ap
                 self.handleBindingsApplied = function (info) {
                     // Implement if needed
                 };
-
                 /*
                  * Optional ViewModel method invoked after the View is removed from the
                  * document DOM.

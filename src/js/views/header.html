@@ -3,20 +3,23 @@
  The Universal Permissive License (UPL), Version 1.0
 -->
 <div class="oj-flex-bar-middle">
-<!--    <button id="drawerToggleButton" data-bind="visible: showOffCanv, click: toggleDrawer,
-       ojComponent: {component:'ojButton', chroming: 'half',
-       display: 'icons', label: 'Navigation Drawer', chroming: 'half',
-       icons: {start: 'oj-fwk-icon oj-fwk-icon-hamburger'}}">
-    </button>-->
+    <!--    <button id="drawerToggleButton" data-bind="visible: showOffCanv, click: toggleDrawer,
+           ojComponent: {component:'ojButton', chroming: 'half',
+           display: 'icons', label: 'Navigation Drawer', chroming: 'half',
+           icons: {start: 'oj-fwk-icon oj-fwk-icon-hamburger'}}">
+        </button>-->
     <button id="backButton" data-bind="visible:showBack,click: function(){window.history.go(-1);},
                             ojComponent: {component:'ojButton', chroming: 'half',
                             display: 'icons', label: 'Back', chroming: 'half',
                             icons: {start: 'fa fa-chevron-left'}}">
     </button>
 </div>
-<div role="heading" class="oj-hybrid-applayout-bar-title oj-sm-12">
+
+<div role="heading" class="oj-hybrid-applayout-bar-title oj-sm-12" style="line-height: 23px;">
     <h1 class="oj-hybrid-applayout-header-title" data-bind="text: pageTitle"></h1>
+    <div class="oj-flex-bar-end">
+        <div data-bind="click: logout">
+            <i class="oj-navigationlist-item-icon fa fa-sign-out demo-icon-font-24 demo-logout" style="-webkit-text-fill-color: white;"></i>
+        </div>
+    </div>
 </div>
-<!--<div class="oj-flex-bar-end">
-    Add additional buttons here
-</div>-->

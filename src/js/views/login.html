@@ -56,10 +56,16 @@
                         <br/>
 
 
-                        <div id='buttons-container' style="padding-top:10px;width:100%;">
-                            <input id="submit" type="submit" data-bind="click: login, 
+                        <div id='buttons-container' style="padding-top:10px;width:80%;">
+                            <input id="submit" type="submit" data-bind="click: loginAction, 
                               ojComponent: {component: 'ojButton', label: oj.Translations.getTranslatedString('login'), chroming: 'full'},
                               css: 'login-btn'"/>
+                        </div>
+
+                        <div style="padding-top:30px;width:20%;">
+                            <button id="fp_btn" data-bind="click: fp_login, 
+                              ojComponent: {component: 'ojButton', display: 'icons',icons: {start:'oj-fp-icon demo-fp-icon'}, chroming: 'full'},
+                              css: 'demo-fp-icon_style'"/>
                         </div>
                     </div>
                 </div>

@@ -91,5 +91,8 @@
     <hook src="scripts/hooks/jetAfterPrepare.js" type="after_prepare" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <engine name="android" spec="~6.0.0" />
-    <engine name="ios" spec="~4.3.1" />
+    <engine name="ios"/>
+    <plugin name="cordova-plugin-camera"/>
+    <plugin name="cordova-plugin-android-fingerprint-auth" />
+    <plugin name="cordova-plugin-touch-id" />
 </widget>

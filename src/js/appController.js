@@ -24,6 +24,7 @@ define(['ojs/ojcore', 'knockout', 'data/appVariables', 'ojs/ojrouter', 'ojs/ojar
                 oj.Router.defaults['urlAdapter'] = new oj.Router.urlParamAdapter();
                 self.moduleConfig = self.router.moduleConfig;
 
+
                 // Navigation setup
                 self.navData = [
                     {name: '首页', id: 'home', show: true,
@@ -41,7 +42,7 @@ define(['ojs/ojcore', 'knockout', 'data/appVariables', 'ojs/ojrouter', 'ojs/ojar
 
                 // Drawer setup
                 self.toggleDrawer = function () {
-                    if(appVar.userRole === 'manager'){
+                    if (appVar.userRole === 'manager') {
                         self.navData[2].show = true;
                         self.navDataSource.reset(self.navData);
                     }
@@ -92,8 +93,10 @@ define(['ojs/ojcore', 'knockout', 'data/appVariables', 'ojs/ojrouter', 'ojs/ojar
                     contentElem.classList.add('oj-complete');
                 };
 
+
+
                 // implement in login.js
-                self.logout = null;
+//                self.logout = null;
             }
 
             return new ControllerViewModel();
